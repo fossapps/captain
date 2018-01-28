@@ -132,6 +132,7 @@ func TestDoesNotPanicWhenNoRuntimeProcessorPresent(t *testing.T) {
 	})
 	Assert.NotPanics(t, testJob.Run)
 }
+
 func TestRunTimeProcessorGetsCalled(t *testing.T) {
 	testJob := job.New()
 	runtimeProcessorCalled := false
@@ -146,6 +147,7 @@ func TestRunTimeProcessorGetsCalled(t *testing.T) {
 	testJob.Run()
 	Assert.True(t, runtimeProcessorCalled)
 }
+
 func TestLongRunningProcessorWorksWithoutRuntimeProcessor(t *testing.T) {
 	testJob := job.New()
 	testJob.SetWorker(func(channel chan string, doneFunc *sync.WaitGroup) {
@@ -154,4 +156,17 @@ func TestLongRunningProcessorWorksWithoutRuntimeProcessor(t *testing.T) {
 		doneFunc.Done()
 	})
 	Assert.NotPanics(t, testJob.Run)
+}
+
+func TestPanicsIfWorkerReturnsError(t *testing.T) {
+	testJob := job.New()
+	testJob.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) error {
+		return errors.New("error on runtime processor")
+	})
+	testJob.SetWorker(func(channel chan string, doneFunc *sync.WaitGroup) {
+		time.Sleep(500 * time.Millisecond)
+		channel <- "Done..."
+		doneFunc.Done()
+	})
+	// Assert.Panics(t, testJob.Run)
 }

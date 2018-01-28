@@ -15,7 +15,7 @@ type Config struct {
 }
 
 type ResultProcessor interface{}
-type RuntimeProcessor func (tick time.Time, message string, startTime time.Time) error
+type RuntimeProcessor func(tick time.Time, message string, startTime time.Time) error
 type Worker func(Channel chan string, WaitGroup *sync.WaitGroup)
 
 type LockProvider interface {
@@ -75,23 +75,27 @@ func (config *Config) runWorker() error {
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	go config.Worker(commChan, &wg)
-	go config.invokeRuntimeProcessor(ticker, commChan, startTime)
-
+	go config.reportRuntimeProcessor(ticker, commChan, startTime, &wg)
 	wg.Wait()
 	return nil
 }
 
-func (config *Config) invokeRuntimeProcessor(ticker *time.Ticker, commChan chan string, startTime time.Time) {
+func (config *Config) reportRuntimeProcessor(ticker *time.Ticker, commChan chan string, startTime time.Time, group *sync.WaitGroup) {
 	for t := range ticker.C {
 		message := getMessage(commChan)
 		if config.RuntimeProcessor == nil {
 			return
 		}
-		err := config.RuntimeProcessor(t, message, startTime)
-		if err != nil {
-			panic(err)
-		}
+		config.invokeRuntimeProcessor(t, message, startTime)
 	}
+}
+
+func (config *Config) invokeRuntimeProcessor(t time.Time, message string, startTime time.Time) error {
+	err := config.RuntimeProcessor(t, message, startTime)
+	if err != nil {
+		panic(err)
+	}
+	return nil
 }
 
 func (config *Config) ensureLock() error {
