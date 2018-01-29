@@ -1,5 +1,6 @@
 # go capn'
-![./.github/go-captain.png](./.github/go-captain.png)
+<p align="center"><img src="./.github/go-captain.png" width="200" /></p>
+
 ### What's Go Captain?
 The question you should be asking is Who is Go Cap'n? He's captain of your ship, he controls all the jobs you need done. From cleaning up to polishing.
 Go Captain takes your command, and runs it.
