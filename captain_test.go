@@ -71,9 +71,7 @@ func TestWithRuntimeProcessingFrequency(t *testing.T) {
 
 func TestWithRuntimeProcessor(t *testing.T) {
 	testJob := captain.CreateJob()
-	testJob.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) error {
-		return nil
-	})
+	testJob.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) {})
 	if testJob.RuntimeProcessor == nil {
 		t.Error("Should be able to set run time processor")
 	}
@@ -136,9 +134,8 @@ func TestDoesNotPanicWhenNoRuntimeProcessorPresent(t *testing.T) {
 func TestRunTimeProcessorGetsCalled(t *testing.T) {
 	testJob := captain.CreateJob()
 	runtimeProcessorCalled := false
-	testJob.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) error {
+	testJob.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) {
 		runtimeProcessorCalled = true
-		return nil
 	})
 	testJob.SetWorker(func(channel chan string, doneFunc *sync.WaitGroup) {
 		time.Sleep(1 * time.Second)
@@ -156,17 +153,4 @@ func TestLongRunningProcessorWorksWithoutRuntimeProcessor(t *testing.T) {
 		doneFunc.Done()
 	})
 	Assert.NotPanics(t, testJob.Run)
-}
-
-func TestPanicsIfWorkerReturnsError(t *testing.T) {
-	testJob := captain.CreateJob()
-	testJob.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) error {
-		return errors.New("error on runtime processor")
-	})
-	testJob.SetWorker(func(channel chan string, doneFunc *sync.WaitGroup) {
-		time.Sleep(500 * time.Millisecond)
-		channel <- "Done..."
-		doneFunc.Done()
-	})
-	// Assert.Panics(t, testJob.Run)
 }
