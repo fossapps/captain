@@ -1,4 +1,4 @@
-package job
+package captain
 
 import (
 	"time"
@@ -23,7 +23,7 @@ type LockProvider interface {
 	Release() error
 }
 
-func New() Config {
+func CreateJob() Config {
 	return Config{
 		LockProvider:               nil,
 		RuntimeProcessor:           nil,

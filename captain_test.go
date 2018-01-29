@@ -1,8 +1,8 @@
-package job_test
+package captain_test
 
 import (
 	"testing"
-	"github.com/cyberhck/jobs"
+	"github.com/cyberhck/captain"
 	"time"
 	Assert "github.com/stretchr/testify/assert"
 	"errors"
@@ -27,7 +27,7 @@ func (m *LockProviderMock) Release() error {
 func TestNew(t *testing.T) {
 	assert := Assert.New(t)
 
-	testJob := job.New()
+	testJob := captain.CreateJob()
 
 	assert.Equal(testJob.RuntimeProcessingFrequency, 200*time.Millisecond)
 	assert.Nil(testJob.ResultProcessor)
@@ -43,26 +43,26 @@ type LockProvider struct {
 func (r LockProvider) Acquire() error { return r.acquire }
 func (r LockProvider) Release() error { return r.release }
 
-func getMockedLockProvider(acquire error, release error) job.LockProvider {
+func getMockedLockProvider(acquire error, release error) captain.LockProvider {
 	return LockProvider{
 		acquire: acquire,
 		release: release,
 	}
 }
 func TestWithLockProvider(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.WithLockProvider(getMockedLockProvider(nil, nil))
 	Assert.NotNil(t, testJob.LockProvider)
 }
 
 func TestWithResultProcessor(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.WithResultProcessor(func() {})
 	Assert.NotNil(t, testJob.ResultProcessor)
 }
 
 func TestWithRuntimeProcessingFrequency(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.WithRuntimeProcessingFrequency(1 * time.Second)
 	if testJob.RuntimeProcessingFrequency != 1*time.Second {
 		t.Error("Should be able to change runtime processing frequency")
@@ -70,7 +70,7 @@ func TestWithRuntimeProcessingFrequency(t *testing.T) {
 }
 
 func TestWithRuntimeProcessor(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) error {
 		return nil
 	})
@@ -81,7 +81,7 @@ func TestWithRuntimeProcessor(t *testing.T) {
 
 func TestRunPanicsIfLockNotAcquired(t *testing.T) {
 	assert := Assert.New(t)
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.WithLockProvider(getMockedLockProvider(errors.New("couldn't acquire lock"), nil))
 	testJob.SetWorker(func(channel chan string, doneFunc *sync.WaitGroup) {})
 	assert.Panics(testJob.Run)
@@ -89,7 +89,7 @@ func TestRunPanicsIfLockNotAcquired(t *testing.T) {
 
 func TestRunDoesNotPanicIfLockAcquired(t *testing.T) {
 	assert := Assert.New(t)
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.WithLockProvider(getMockedLockProvider(nil, nil))
 	testJob.SetWorker(func(channel chan string, doneFunc *sync.WaitGroup) {
 		doneFunc.Done()
@@ -98,7 +98,7 @@ func TestRunDoesNotPanicIfLockAcquired(t *testing.T) {
 }
 
 func TestRunPanicsIfNoWorkerIsDefined(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	mocked := new(LockProviderMock)
 	mocked.On("Acquire").Return(nil)
 	testJob.WithLockProvider(mocked)
@@ -106,7 +106,7 @@ func TestRunPanicsIfNoWorkerIsDefined(t *testing.T) {
 }
 
 func TestRunCallsWorker(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	mocked := new(LockProviderMock)
 	mocked.On("Acquire").Return(nil)
 	testJob.WithLockProvider(mocked)
@@ -118,7 +118,7 @@ func TestRunCallsWorker(t *testing.T) {
 }
 
 func TestRunWorksWithoutLockProvider(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.SetWorker(func(channel chan string, doneFunc *sync.WaitGroup) {
 		doneFunc.Done()
 	})
@@ -126,7 +126,7 @@ func TestRunWorksWithoutLockProvider(t *testing.T) {
 }
 
 func TestDoesNotPanicWhenNoRuntimeProcessorPresent(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.SetWorker(func(channel chan string, doneFunc *sync.WaitGroup) {
 		doneFunc.Done()
 	})
@@ -134,7 +134,7 @@ func TestDoesNotPanicWhenNoRuntimeProcessorPresent(t *testing.T) {
 }
 
 func TestRunTimeProcessorGetsCalled(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	runtimeProcessorCalled := false
 	testJob.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) error {
 		runtimeProcessorCalled = true
@@ -149,7 +149,7 @@ func TestRunTimeProcessorGetsCalled(t *testing.T) {
 }
 
 func TestLongRunningProcessorWorksWithoutRuntimeProcessor(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.SetWorker(func(channel chan string, doneFunc *sync.WaitGroup) {
 		time.Sleep(10 * time.Millisecond)
 		channel <- "Done..."
@@ -159,7 +159,7 @@ func TestLongRunningProcessorWorksWithoutRuntimeProcessor(t *testing.T) {
 }
 
 func TestPanicsIfWorkerReturnsError(t *testing.T) {
-	testJob := job.New()
+	testJob := captain.CreateJob()
 	testJob.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) error {
 		return errors.New("error on runtime processor")
 	})
