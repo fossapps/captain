@@ -9,6 +9,38 @@ Go Captain takes your command, and runs it.
 Well, technically you can. But if you use Capn', he'll tell you if the job failed, he'll report to you how long is it taking, etc.
 You can setup a adapter which will publish the information to all your crew members on slack.
 
+### Okay, tell me more
+
+```go
+package main
+
+import (
+	"github.com/cyberhck/captain"
+	"time"
+	"sync"
+	"log"
+)
+
+func main() {
+	job := captain.CreateJob()
+	job.WithRuntimeProcessingFrequency(100 * time.Millisecond)
+	job.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) error {
+		log.Print(tick, message, time.Since(startTime))
+		return nil
+	})
+	job.SetWorker(func(Channel chan string, WaitGroup *sync.WaitGroup) {
+		for i := 0; i < 10; i ++ {
+			time.Sleep(10 * time.Millisecond)
+			Channel <- " slept for 10 ms"
+		}
+		WaitGroup.Done()
+	})
+	job.Run()
+}
+```
+That's all you need to execute to see what this is meant to do.
+
+
 ### What else can this do?
 As of now, it takes your job and your run time processor, and runs them in goroutines, for every tick (configurable), your runtime processor is called
 where you can note things like how long has it been running, did it send something in channel, do we need to tell our crew that this job is taking too long?
