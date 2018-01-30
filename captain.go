@@ -84,6 +84,7 @@ func (config *Config) invokeWorker(commChan chan string, group *sync.WaitGroup) 
 	config.Worker(commChan)
 	group.Done()
 }
+
 func (config *Config) reportRuntimeProcessor(ticker *time.Ticker, commChan chan string, startTime time.Time, group *sync.WaitGroup) {
 	for t := range ticker.C {
 		message := getMessage(commChan)

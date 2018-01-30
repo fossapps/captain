@@ -24,16 +24,15 @@ import (
 func main() {
 	job := captain.CreateJob()
 	job.WithRuntimeProcessingFrequency(100 * time.Millisecond)
-	job.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) error {
+	job.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) {
 		log.Print(tick, message, time.Since(startTime))
-		return nil
 	})
-	job.SetWorker(func(Channel chan string, WaitGroup *sync.WaitGroup) {
+
+	job.SetWorker(func(Channel chan string) {
 		for i := 0; i < 10; i ++ {
 			time.Sleep(10 * time.Millisecond)
 			Channel <- " slept for 10 ms"
 		}
-		WaitGroup.Done()
 	})
 	job.Run()
 }
