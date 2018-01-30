@@ -16,7 +16,7 @@ type Config struct {
 
 type ResultProcessor interface{}
 type RuntimeProcessor func(tick time.Time, message string, startTime time.Time)
-type Worker func(Channel chan string, WaitGroup *sync.WaitGroup)
+type Worker func(Channel chan string)
 
 type LockProvider interface {
 	Acquire() error
@@ -74,12 +74,16 @@ func (config *Config) runWorker() error {
 	defer close(commChan)
 	wg := sync.WaitGroup{}
 	wg.Add(1)
-	go config.Worker(commChan, &wg)
+	go config.invokeWorker(commChan, &wg)
 	go config.reportRuntimeProcessor(ticker, commChan, startTime, &wg)
 	wg.Wait()
 	return nil
 }
 
+func (config *Config) invokeWorker(commChan chan string, group *sync.WaitGroup) {
+	config.Worker(commChan)
+	group.Done()
+}
 func (config *Config) reportRuntimeProcessor(ticker *time.Ticker, commChan chan string, startTime time.Time, group *sync.WaitGroup) {
 	for t := range ticker.C {
 		message := getMessage(commChan)
