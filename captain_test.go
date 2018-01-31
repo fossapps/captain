@@ -1,12 +1,14 @@
+// external tests for captain package
+
 package captain_test
 
 import (
-	"testing"
-	"github.com/cyberhck/captain"
-	"time"
-	Assert "github.com/stretchr/testify/assert"
 	"errors"
+	"github.com/cyberhck/captain"
+	Assert "github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"testing"
+	"time"
 )
 
 type LockProviderMock struct {
@@ -56,7 +58,7 @@ func TestWithLockProvider(t *testing.T) {
 
 func TestWithResultProcessor(t *testing.T) {
 	testJob := captain.CreateJob()
-	testJob.WithResultProcessor(func() {})
+	testJob.WithResultProcessor(func(results []string) {})
 	Assert.NotNil(t, testJob.ResultProcessor)
 }
 
@@ -76,7 +78,7 @@ func TestRunPanicsIfLockNotAcquired(t *testing.T) {
 	assert := Assert.New(t)
 	testJob := captain.CreateJob()
 	testJob.WithLockProvider(getMockedLockProvider(errors.New("couldn't acquire lock"), nil))
-	testJob.SetWorker(func(channel chan string) {})
+	testJob.SetWorker(func(channels captain.CommChan) {})
 	assert.Panics(testJob.Run)
 }
 
@@ -84,7 +86,7 @@ func TestRunDoesNotPanicIfLockAcquired(t *testing.T) {
 	assert := Assert.New(t)
 	testJob := captain.CreateJob()
 	testJob.WithLockProvider(getMockedLockProvider(nil, nil))
-	testJob.SetWorker(func(channel chan string) {})
+	testJob.SetWorker(func(channels captain.CommChan) {})
 	assert.NotPanics(testJob.Run)
 }
 
@@ -101,28 +103,28 @@ func TestRunCallsWorker(t *testing.T) {
 	mocked := new(LockProviderMock)
 	mocked.On("Acquire").Return(nil)
 	testJob.WithLockProvider(mocked)
-	testJob.SetWorker(func(channel chan string) {})
+	testJob.SetWorker(func(channels captain.CommChan) {})
 	testJob.Run()
 	mocked.AssertExpectations(t)
 }
 
 func TestRunWorksWithoutLockProvider(t *testing.T) {
 	testJob := captain.CreateJob()
-	testJob.SetWorker(func(channel chan string) {})
+	testJob.SetWorker(func(channels captain.CommChan) {})
 	Assert.NotPanics(t, testJob.Run)
 }
 
 func TestDoesNotPanicWhenNoRuntimeProcessorPresent(t *testing.T) {
 	testJob := captain.CreateJob()
-	testJob.SetWorker(func(channel chan string) {})
+	testJob.SetWorker(func(channels captain.CommChan) {})
 	Assert.NotPanics(t, testJob.Run)
 }
 
 func TestLongRunningProcessorWorksWithoutRuntimeProcessor(t *testing.T) {
 	testJob := captain.CreateJob()
-	testJob.SetWorker(func(channel chan string) {
+	testJob.SetWorker(func(channels captain.CommChan) {
 		time.Sleep(10 * time.Millisecond)
-		channel <- "Done..."
+		channels.Logs <- "Done..."
 	})
 	Assert.NotPanics(t, testJob.Run)
 }

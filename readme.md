@@ -28,10 +28,10 @@ func main() {
 		log.Print(tick, message, time.Since(startTime))
 	})
 
-	job.SetWorker(func(Channel chan string) {
+	job.SetWorker(func(Channel captain.CommChan) {
 		for i := 0; i < 10; i ++ {
 			time.Sleep(10 * time.Millisecond)
-			Channel <- " slept for 10 ms"
+			Channel.Logs <- " slept for 10 ms"
 		}
 	})
 	job.Run()
