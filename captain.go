@@ -1,7 +1,7 @@
 // this is used to run your jobs, see docs for more info
 // or scroll down
 
-package captain
+package go_captain
 
 import (
 	"errors"

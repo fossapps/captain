@@ -1,6 +1,7 @@
 # go capn'
 <p align="center"><img src="./.github/go-captain.png" width="200" /></p>
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/cyberhck/go-captain)](https://goreportcard.com/report/github.com/cyberhck/go-captain)[![codecov](https://codecov.io/gh/cyberhck/go-captain/branch/master/graph/badge.svg)](https://codecov.io/gh/cyberhck/go-captain)
 ### What's Go Captain?
 The question you should be asking is Who is Go Cap'n? He's captain of your ship, he controls all the jobs you need done. From cleaning up to polishing.
 Go Captain takes your command, and runs it.
@@ -11,11 +12,30 @@ You can setup a adapter which will publish the information to all your crew memb
 
 ### Okay, tell me more
 
+Imagine a situation, where you GET data from some random endpoint and store it on db,
+we can write like this:
+```go
+package main
+func main() {
+    resp, _ := http.Get("http://example.com/users")
+    // save resp in db
+    log.Print(resp)
+}
+```
+You'd do much more error handling, and you can live with this. You decide to use cron job to run this every couple of minutes.
+Now imagine some day, they decided to throw an error, or not respond to you, or time out.
+Now unless you write that logic all in this main thread, we won't know there's something important worth paying attention to.
+And there's so many other factor which might slow something down, or maybe kill your worker. We won't be able to catch every single thing.
+
+With Go captain, we wrap our worker in a handler, then we can handle log messages, time outs, or longer execution times.
+
+Now consider you've got cron job which imports new Products from your e-commerce api endpoint every minute, and uses go-capn'
+
 ```go
 package main
 
 import (
-	"github.com/cyberhck/captain"
+	captain "github.com/cyberhck/go-captain"
 	"time"
 	"sync"
 	"log"
@@ -25,19 +45,21 @@ func main() {
 	job := captain.CreateJob()
 	job.WithRuntimeProcessingFrequency(100 * time.Millisecond)
 	job.WithRuntimeProcessor(func(tick time.Time, message string, startTime time.Time) {
-		log.Print(tick, message, time.Since(startTime))
+		if time.Since(startTime) > 2 * time.Minutes {
+			// report this incident via email/slack/anything
+		}
 	})
 
 	job.SetWorker(func(Channel captain.CommChan) {
-		for i := 0; i < 10; i ++ {
-			time.Sleep(10 * time.Millisecond)
-			Channel.Logs <- " slept for 10 ms"
-		}
+		last_import := LastImportDate.Get() // maybe from db
+		resp, _ := http.Get("http://example.com/products/new?since=" + last_import)
+		// log resp in db
+		log.Print(resp)
 	})
 	job.Run()
 }
 ```
-That's all you need to execute to see what this is meant to do.
+Now, say your worker didn't execute for 2 days for some reason, it'll take longer than your usual time, which can be reported back to you.
 
 
 ### What else can this do?
