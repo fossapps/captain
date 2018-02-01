@@ -14,9 +14,11 @@ import (
 type LockProviderMock struct {
 	mock.Mock
 }
+
 func (m *RuntimeProcessor) processor(tick time.Time, message string, startTime time.Time) {
 	m.Called(tick, message, startTime)
 }
+
 type RuntimeProcessor struct {
 	mock.Mock
 }
