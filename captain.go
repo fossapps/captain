@@ -1,6 +1,4 @@
-// this is used to run your jobs, see docs for more info
-// or scroll down
-
+// Package go_captain is used to run your job, and monitor during runtime
 package go_captain
 
 import (
