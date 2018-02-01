@@ -22,7 +22,10 @@ func main() {
     log.Print(resp)
 }
 ```
-You'd do much more error handling, and you can live with this. You decide to use cron job to run this every couple of minutes.
+You'd do much more error handling, and you can live with this.
+
+You decide to use cron job to run this every couple of minutes.
+
 Now imagine some day, they decided to throw an error, or not respond to you, or time out.
 Now unless you write that logic all in this main thread, we won't know there's something important worth paying attention to.
 And there's so many other factor which might slow something down, or maybe kill your worker. We won't be able to catch every single thing.
