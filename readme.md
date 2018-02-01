@@ -1,10 +1,10 @@
 # go capn'
 <p align="center"><img src="./.github/go-captain.png" width="200" /></p>
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/cyberhck/go-captain)](https://goreportcard.com/report/github.com/cyberhck/go-captain)[![codecov](https://codecov.io/gh/cyberhck/go-captain/branch/master/graph/badge.svg)](https://codecov.io/gh/cyberhck/go-captain)
-### What's Go Captain?
-The question you should be asking is Who is Go Cap'n? He's captain of your ship, he controls all the jobs you need done. From cleaning up to polishing.
-Go Captain takes your command, and runs it.
+[![Go Report Card](https://goreportcard.com/badge/github.com/cyberhck/captain)](https://goreportcard.com/report/github.com/cyberhck/captain)[![codecov](https://codecov.io/gh/cyberhck/captain/branch/master/graph/badge.svg)](https://codecov.io/gh/cyberhck/captain)
+### What's Captain?
+The question you should be asking is Who is Cap'n? He's captain of your ship, he controls all the jobs you need done. From cleaning up to polishing.
+Captain takes your command, and runs it.
 
 ### Why can't I do this myself?
 Well, technically you can. But if you use Capn', he'll tell you if the job failed, he'll report to you how long is it taking, etc.
@@ -30,7 +30,7 @@ Now imagine some day, they decided to throw an error, or not respond to you, or 
 Now unless you write that logic all in this main thread, we won't know there's something important worth paying attention to.
 And there's so many other factor which might slow something down, or maybe kill your worker. We won't be able to catch every single thing.
 
-With Go captain, we wrap our worker in a handler, then we can handle log messages, time outs, or longer execution times.
+With captain, we wrap our worker in a handler, then we can handle log messages, time outs, or longer execution times.
 
 Now consider you've got cron job which imports new Products from your e-commerce api endpoint every minute, and uses go-capn'
 
