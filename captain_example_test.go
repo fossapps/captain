@@ -1,15 +1,15 @@
 // external example tests for captain package
-package go_captain_test
+package captain_test
 
 import (
 	"fmt"
-	"github.com/cyberhck/go-captain"
+	"github.com/cyberhck/captain"
 	"strconv"
 )
 
 func ExampleConfig_WithResultProcessor() {
-	job := go_captain.CreateJob()
-	job.SetWorker(func(channels go_captain.CommChan) {
+	job := captain.CreateJob()
+	job.SetWorker(func(channels captain.CommChan) {
 		channels.Result <- "Total Items: " + strconv.Itoa(80)
 	})
 	job.WithResultProcessor(func(results []string) {
