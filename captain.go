@@ -1,5 +1,5 @@
 // Package go_captain is used to run your job, and monitor during runtime
-package go_captain
+package captain
 
 import (
 	"errors"
