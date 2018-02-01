@@ -8,7 +8,7 @@ import (
 )
 
 // Config represents a configuration of a job.
-// You can either create your own, or use CreateJob function which will initial with nil values.
+// You can either create your own, or use CreateJob function which will initialize basic configuration.
 type Config struct {
 	ResultProcessor            ResultProcessor
 	RuntimeProcessor           RuntimeProcessor
@@ -18,7 +18,8 @@ type Config struct {
 	SummaryBuffer              int
 }
 
-// CommChan is a basic struct containing channels used for communication between workers.
+// CommChan is a basic struct containing channels used for communication between your worker,
+// runtime and result processor
 type CommChan struct {
 	Logs   chan string
 	Result chan string
