@@ -1,4 +1,4 @@
-// Package go_captain is used to run your job, and monitor during runtime
+// Package captain is used to run your job, and monitor during runtime
 package captain
 
 import (
