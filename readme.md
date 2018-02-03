@@ -1,4 +1,4 @@
-# go capn'
+# capn'
 <p align="center"><img src="./.github/go-captain.png" width="200" /></p>
 
 [![Build Status](https://travis-ci.org/cyberhck/captain.svg?branch=master)](https://travis-ci.org/cyberhck/captain)[![Go Report Card](https://goreportcard.com/badge/github.com/cyberhck/captain)](https://goreportcard.com/report/github.com/cyberhck/captain)[![codecov](https://codecov.io/gh/cyberhck/captain/branch/master/graph/badge.svg)](https://codecov.io/gh/cyberhck/captain)
