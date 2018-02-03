@@ -1,4 +1,4 @@
-# go capn'
+# capn'
 <p align="center"><img src="./.github/go-captain.png" width="200" /></p>
 
 [![Build Status](https://travis-ci.org/cyberhck/captain.svg?branch=master)](https://travis-ci.org/cyberhck/captain)[![Go Report Card](https://goreportcard.com/badge/github.com/cyberhck/captain)](https://goreportcard.com/report/github.com/cyberhck/captain)[![codecov](https://codecov.io/gh/cyberhck/captain/branch/master/graph/badge.svg)](https://codecov.io/gh/cyberhck/captain)
@@ -32,13 +32,13 @@ And there's so many other factor which might slow something down, or maybe kill 
 
 With captain, we wrap our worker in a handler, then we can handle log messages, time outs, or longer execution times.
 
-Now consider you've got cron job which imports new Products from your e-commerce api endpoint every minute, and uses go-capn'
+Now consider you've got cron job which imports new Products from your e-commerce api endpoint every minute, and uses capn'
 
 ```go
 package main
 
 import (
-	captain "github.com/cyberhck/go-captain"
+	captain "github.com/cyberhck/captain"
 	"time"
 	"sync"
 	"log"
