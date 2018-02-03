@@ -1,7 +1,7 @@
 # go capn'
 <p align="center"><img src="./.github/go-captain.png" width="200" /></p>
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/cyberhck/captain)](https://goreportcard.com/report/github.com/cyberhck/captain)[![codecov](https://codecov.io/gh/cyberhck/captain/branch/master/graph/badge.svg)](https://codecov.io/gh/cyberhck/captain)
+[![Build Status](https://travis-ci.org/cyberhck/captain.svg?branch=master)](https://travis-ci.org/cyberhck/captain)[![Go Report Card](https://goreportcard.com/badge/github.com/cyberhck/captain)](https://goreportcard.com/report/github.com/cyberhck/captain)[![codecov](https://codecov.io/gh/cyberhck/captain/branch/master/graph/badge.svg)](https://codecov.io/gh/cyberhck/captain)
 ### What's Captain?
 The question you should be asking is Who is Cap'n? He's captain of your ship, he controls all the jobs you need done. From cleaning up to polishing.
 Captain takes your command, and runs it.
