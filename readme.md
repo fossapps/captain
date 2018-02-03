@@ -38,7 +38,7 @@ Now consider you've got cron job which imports new Products from your e-commerce
 package main
 
 import (
-	captain "github.com/cyberhck/go-captain"
+	captain "github.com/cyberhck/captain"
 	"time"
 	"sync"
 	"log"
