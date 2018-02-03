@@ -32,7 +32,7 @@ And there's so many other factor which might slow something down, or maybe kill 
 
 With captain, we wrap our worker in a handler, then we can handle log messages, time outs, or longer execution times.
 
-Now consider you've got cron job which imports new Products from your e-commerce api endpoint every minute, and uses go-capn'
+Now consider you've got cron job which imports new Products from your e-commerce api endpoint every minute, and uses capn'
 
 ```go
 package main
