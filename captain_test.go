@@ -4,7 +4,7 @@ package captain_test
 
 import (
 	"errors"
-	"github.com/cyberhck/captain"
+	"github.com/fossapps/captain"
 	Assert "github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"testing"

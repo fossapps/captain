@@ -3,7 +3,7 @@ package captain_test
 
 import (
 	"fmt"
-	"github.com/cyberhck/captain"
+	"github.com/fossapps/captain"
 	"strconv"
 )
 

@@ -1,7 +1,7 @@
 # capn'
 <p align="center"><img src="./.github/go-captain.png" width="200" /></p>
 
-[![Build Status](https://travis-ci.org/cyberhck/captain.svg?branch=master)](https://travis-ci.org/cyberhck/captain)[![Go Report Card](https://goreportcard.com/badge/github.com/cyberhck/captain)](https://goreportcard.com/report/github.com/cyberhck/captain)[![codecov](https://codecov.io/gh/cyberhck/captain/branch/master/graph/badge.svg)](https://codecov.io/gh/cyberhck/captain)
+[![Build Status](https://travis-ci.com/fossapps/captain.svg?branch=master)](https://travis-ci.com/fossapps/captain)[![Go Report Card](https://goreportcard.com/badge/github.com/fossapps/captain)](https://goreportcard.com/report/github.com/fossapps/captain)[![codecov](https://codecov.io/gh/fossapps/captain/branch/master/graph/badge.svg)](https://codecov.io/gh/fossapps/captain)
 ### What's Captain?
 The question you should be asking is Who is Cap'n? He's captain of your ship, he controls all the jobs you need done. From cleaning up to polishing.
 Captain takes your command, and runs it.
@@ -16,6 +16,11 @@ Imagine a situation, where you GET data from some random endpoint and store it o
 we can write like this:
 ```go
 package main
+
+import (
+	"net/http"
+	"log"
+)
 func main() {
     resp, _ := http.Get("http://example.com/users")
     // save resp in db
@@ -38,8 +43,9 @@ Now consider you've got cron job which imports new Products from your e-commerce
 package main
 
 import (
-	captain "github.com/cyberhck/captain"
+	"github.com/fossapps/captain"
 	"time"
+	"net/http"
 	"sync"
 	"log"
 )
