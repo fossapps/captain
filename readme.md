@@ -1,7 +1,7 @@
 # capn'
 <p align="center"><img src="./.github/go-captain.png" width="200" /></p>
 
-[![Build Status](https://travis-ci.com/fossapps/captain.svg?branch=master)](https://travis-ci.com/fossapps/captain)[![Go Report Card](https://goreportcard.com/badge/github.com/fossapps/captain)](https://goreportcard.com/report/github.com/fossapps/captain)[![codecov](https://codecov.io/gh/fossapps/captain/branch/master/graph/badge.svg)](https://codecov.io/gh/fossapps/captain)[![](https://godoc.org/github.com/fossapps/pushy?status.svg)](http://godoc.org/github.com/fossapps/pushy)
+[![Build Status](https://travis-ci.com/fossapps/captain.svg?branch=master)](https://travis-ci.com/fossapps/captain)[![Go Report Card](https://goreportcard.com/badge/github.com/fossapps/captain)](https://goreportcard.com/report/github.com/fossapps/captain)[![codecov](https://codecov.io/gh/fossapps/captain/branch/master/graph/badge.svg)](https://codecov.io/gh/fossapps/captain)[![](https://godoc.org/github.com/fossapps/captain?status.svg)](http://godoc.org/github.com/fossapps/captain)
 ### What's Captain?
 The question you should be asking is Who is Cap'n? He's captain of your ship, he controls all the jobs you need done. From cleaning up to polishing.
 Captain takes your command, and runs it.
